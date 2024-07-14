@@ -19,31 +19,20 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - os: windows-latest
-            name: Windows 64
-            laz-url: https://sourceforge.net/projects/lazarus/files/Lazarus%20Windows%2064%20bits/Lazarus%202.2.2/lazarus-2.2.2-fpc-3.2.2-win64.exe
-            
-          - os: windows-latest
-            name: Windows 32
-            laz-url: https://sourceforge.net/projects/lazarus/files/Lazarus%20Windows%2032%20bits/Lazarus%202.2.2/lazarus-2.2.2-fpc-3.2.2-win32.exe
-            
-          - os: ubuntu-latest
-            name: Linux 64
-            laz-url: https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%202.2.2/lazarus-project_2.2.2-0_amd64.deb
-            fpc-url: |
-              https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%202.2.2/fpc-laz_3.2.2-210709_amd64.deb
-              https://sourceforge.net/projects/lazarus/files/Lazarus%20Linux%20amd64%20DEB/Lazarus%202.2.2/fpc-src_3.2.2-210709_amd64.deb
-          
-          - os: macos-latest
+          - os: macos-14
             name: MacOS 64
             laz-url: https://sourceforge.net/projects/lazarus/files/Lazarus%20macOS%20x86-64/Lazarus%202.2.2/Lazarus-2.2.2-0-x86_64-macosx.pkg
             fpc-url: |
               https://sourceforge.net/projects/lazarus/files/Lazarus%20macOS%20x86-64/Lazarus%202.2.2/fpc-3.2.2.intelarm64-macosx.dmg
               https://sourceforge.net/projects/lazarus/files/Lazarus%20macOS%20x86-64/Lazarus%202.2.2/fpc-src-3.2.2-20210709-macosx.dmg 
-        
+
     steps:
       - uses: actions/checkout@v3.0.2
       
+      - name: Test
+        run: |
+          uname -m
+
       - name: Install Lazarus
         uses: ./
         with:
@@ -52,7 +41,7 @@ jobs:
       
       - name: Build Test
         run: |
-          lazbuild test_lazarus.lpi
+          lazbuild --cpu=aarch64 --os=darwin test_lazarus.lpi
           
       - name: Run Test
         run: |
